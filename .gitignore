@@ -53,3 +53,21 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+#
+
+.DS_Store
+.idea
+*.log
+tmp/
+
+build/
+build-debug/
+.cache/
+md_to_org
+.clang-format
+CMakeLists.txt
+bin/
+unity.c
+unity.h
+unity_internals.h
