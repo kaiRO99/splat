@@ -9,7 +9,8 @@
 # Compier and Flags
 CC :=gcc
 CFLAGS := -g -O0 -Wall -Wextra -std=c11
-CFLAGS += -I./include -I./tests -I./tests/unity -I./tests/utils
+CFLAGS += -I./include -I./include/utils -I./tests -I./tests/unity -I./tests/utils -I./src/utils
+LIBS := -lwebp -ljpeg
 # add -fsanitize=address for memory error detection
 #LDFLAGS := -fsanitize=address
 #add -DHAVE_GETOPT_LONG if needed
@@ -24,7 +25,7 @@ TEST_DIR := tests
 
 # Main program
 TARGET:= $(BIN_DIR)/splat
-SRCS := $(wildcard $(SRC_DIR)/*.c)
+SRCS := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/utils/*.c)
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 #Testing
@@ -51,13 +52,13 @@ all: $(TARGET)
 # Link step
 $(TARGET): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) $(OBJS) -o $@ -lwebp
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LIBS)
 # add -fsanitize=address
 
 # Compile step
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -lwebp
+	@mkdir -p $(BUILD_DIR)/utils
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # build test executables
 # $(TEST_FILE_BIN): $(TEST_FILE_SRC) $(UNITY_SRC) $(TEST_OBJS) $(TEST_HELPERS_SRC)
