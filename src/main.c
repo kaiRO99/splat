@@ -67,8 +67,8 @@ int main(int argc, char *argv[]) {
         jpeg_finish_decompress(&cinfo);
         jpeg_destroy_decompress(&cinfo);
         // at this point, raw data is in pixels
-
-    } else if (is_ppm(argv[1])) { // .ppm
+    }
+    if (is_ppm(argv[1])) { // .ppm
         char magic[3];
         int maxval;
 
