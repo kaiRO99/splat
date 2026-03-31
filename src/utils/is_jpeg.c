@@ -37,4 +37,4 @@ int is_jpeg(const char *filename) {
     } // if
 
     return 0;
-} // is_md()
+} // is_jpeg()

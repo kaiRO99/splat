@@ -10,7 +10,7 @@
 CC :=gcc
 CFLAGS := -g -O0 -Wall -Wextra -std=c11
 CFLAGS += -I./include -I./include/utils -I./tests -I./tests/unity -I./tests/utils -I./src/utils
-LIBS := -lwebp -ljpeg
+LIBS := -lwebp -ljpeg -lpng
 # add -fsanitize=address for memory error detection
 #LDFLAGS := -fsanitize=address
 #add -DHAVE_GETOPT_LONG if needed

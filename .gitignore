@@ -72,3 +72,12 @@ unity.c
 unity.h
 unity_internals.h
 compile_commands.json
+
+KaiRyallOta.jpeg
+KaiRyallOta.jpg
+KaiRyallOta.ppm
+test.png
+out.webp
+
+#valgrind dumps
+vgcore.*
