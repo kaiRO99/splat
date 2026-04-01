@@ -11,6 +11,7 @@
 typedef struct {
     char *source_path;
     char *target_path;
+    int quality;
     int dry_run;
     int recursive;
     int force;
