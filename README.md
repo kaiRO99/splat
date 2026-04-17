@@ -22,6 +22,13 @@ Options:</br>
 ## Ideas:
 - show the difference in file sizes after conversion
 
+## TODO:
+- Make sure to ensure outptut path with -o flag is a dir of input is a dir
+- Ensure returns are consistent
+
 ## Roadmap:
 - [ ] Add RAW format support (need height and width from user).
 - [ ] Enable conversions between all types.
+
+## Notes:
+- If adding more formats, separate parsing into src/formats/"format".c

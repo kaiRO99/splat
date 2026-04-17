@@ -9,13 +9,13 @@
 
 // config structure
 typedef struct {
-    char *source_path;
-    char *target_path;
+    char *input_path;
+    char *output_path;
+    int output_path_allocated;
     int quality;
     int dry_run;
     int recursive;
     int force;
-    int webp;
 } Config;
 
 #endif // CONFIG_H_
