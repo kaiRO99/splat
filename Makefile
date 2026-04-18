@@ -20,7 +20,7 @@ SRC_DIR := src
 BIN_DIR := bin
 BUILD_DIR:= $(BIN_DIR)/build
 TEST_DIR := tests
-# UNITY_DIR := $(TEST_DIR)/unity
+UNITY_DIR := $(TEST_DIR)/unity
 # TEST_HELPERS_DIR := $(TEST_DIR)/utils
 
 # Main program
@@ -29,21 +29,21 @@ SRCS := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/utils/*.c)
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 #Testing
-# UNITY_SRC :=$(UNITY_DIR)/unity.c
-# TEST_FILE_SRC := $(TEST_DIR)/test_file.c
-# TEST_UTILS_SRC :=$(TEST_DIR)/test_utils.c
+UNITY_SRC :=$(UNITY_DIR)/unity.c
+TEST_UTILS_SRC :=$(TEST_DIR)/test_utils.c
 # TEST_LINE_SRC :=$(TEST_DIR)/test_line.c
 # TEST_CLI_SRC :=$(TEST_DIR)/test_cli.c
 # TEST_HELPERS_SRC := $(wildcard $(TEST_HELPERS_DIR)/*.c)
 
 # TEST executables (separate binaries for each test suite)
 # TEST_FILE_BIN :=$(BIN_DIR)/test_file
-# TEST_UTILS_BIN:=$(BIN_DIR)/test_utils
+TEST_UTILS_BIN:=$(BIN_DIR)/test_utils
+TEST_HELP_BIN:=$(Bin_DIR)/test_help
 # TEST_LINE_BIN:=$(BIN_DIR)/test_line
 # TEST_CLI_BIN:=$(BIN_DIR)/test_cli
 
 #Filter out main.o
-# TEST_OBJS:= $(filter-out $(BUILD_DIR)/main.o,$(OBJS))
+TEST_OBJS:= $(filter-out $(BUILD_DIR)/main.o,$(OBJS))
 
 # Default target
 .PHONY: all
@@ -65,9 +65,9 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 # 	@mkdir -p $(BIN_DIR)
 # 	$(CC) $(CFLAGS) -o $@ $^
 
-# $(TEST_UTILS_BIN): $(TEST_UTILS_SRC) $(UNITY_SRC) $(TEST_OBJS) $(TEST_HELPERS_SRC)
-# 	@mkdir -p $(BIN_DIR)
-# 	$(CC) $(CFLAGS) -o $@ $^
+$(TEST_UTILS_BIN): $(TEST_UTILS_SRC) $(UNITY_SRC) $(TEST_OBJS)
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 # $(TEST_LINE_BIN): $(TEST_LINE_SRC) $(UNITY_SRC) $(TEST_OBJS) $(TEST_HELPERS_SRC)
 # 	@mkdir -p $(BIN_DIR)
@@ -78,13 +78,18 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 # 	$(CC) $(CFLAGS) -o $@ $^
 
 # Run all tests
-# .PHONY: test
-# test: clean-test $(TEST_FILE_BIN) $(TEST_UTILS_BIN) $(TEST_LINE_BIN) $(TEST_CLI_BIN)
-# 	@echo ""
-# 	@echo "Running Utility Function Tests..."
-# 	@echo "========================================="
-# 	-@./$(TEST_UTILS_BIN)
-# 	@$(MAKE) clean-test
+.PHONY: test
+test: clean-test $(TEST_FILE_BIN) $(TEST_UTILS_BIN) $(TEST_LINE_BIN) $(TEST_CLI_BIN)
+	@echo ""
+	@echo "Running Utility Function Tests..."
+	@echo "========================================="
+	-@./$(TEST_UTILS_BIN)
+	@$(MAKE) clean-test
+	@echo ""
+	@echo "Running Help Flag Tests..."
+	@echo "========================================="
+	@chmod +x tests/test_help.sh
+	@./tests/test_help.sh
 # 	@echo ""
 # 	@echo "Running File Conversion Tests..."
 # 	@echo "========================================="
@@ -113,14 +118,24 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 # 	@./$(TEST_FILE_BIN)
 # 	@$(MAKE) clean-test
 
-# # Run only utils tests
-# .PHONY: test-utils
-# test-utils: $(TEST_UTILS_BIN)
-# 	@echo ""
-# 	@echo "========================================="
-# 	@echo "Running utils conversion tests..."
-# 	@echo "========================================="
-# 	@./$(TEST_UTILS_BIN)
+# Run only utils tests
+.PHONY: test-utils
+test-utils: $(TEST_UTILS_BIN)
+	@echo ""
+	@echo "========================================="
+	@echo "Running utils conversion tests..."
+	@echo "========================================="
+	@./$(TEST_UTILS_BIN)
+
+# Run only help flag test
+.PHONY: test-help
+test-help:
+	@echo ""
+	@echo "========================================="
+	@echo "Running help flag tests..."
+	@echo "========================================="
+	@chmod +x tests/test_help.sh
+	@./tests/test_help.sh
 
 # # Run only line tests
 # .PHONY: test-line
@@ -166,13 +181,13 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 # rm -rf $(BUILD_DIR) $(TARGET) $(TEST_FILE_BIN) $(TEST_UTILS_BIN) $(TEST_LINE_BIN)
 .PHONY: clean
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET)
+	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_UTILS_BIN) $(TEST_HELP_BIN)
 
 # Clean Test
-# .PHONY: clean-test
-# clean-test:
-# 	@echo "Cleaning up test files"
-# 	@rm -rf tests/fixtures/outputs
+.PHONY: clean-test
+clean-test:
+	@echo "Cleaning up test files"
+	@rm -rf tests/fixtures/outputs
 
 # Convenience targets
 .PHONY: run
@@ -184,22 +199,23 @@ debug: $(TARGET)
 	lldb ./$(TARGET)
 
 # Help target
-# .PHONY: help
-# help:
-# 	@echo "Available targets:"
-# 	@echo "  make              - Build the main program"
-# 	@echo "  make test         - Build and run all tests"
-# 	@echo "  make test-utils   - Run only utility function tests"
-# 	@echo "  make test-file    - Run only file conversion tests"
-# 	@echo "  make test-line    - Run only line conversion tests"
-# 	@echo "  make test-cli     - Run only command line tests"
-# 	@echo "  make memcheck     - Run tests with valgrind (check for leaks)"
-# 	@echo "  make run          - Build and run the program"
-# 	@echo "  make debug        - Build and run with lldb debugger"
-# 	@echo "  make clean        - Remove all build artifacts"
-# 	@echo "  make help         - Show this help message"
+.PHONY: help
+help:
+	@echo "Available targets:"
+	@echo "  make              - Build the main program"
+	@echo "  make test         - Build and run all tests"
+	@echo "  make test-utils   - Run only utility function tests"
+	@echo "  make test-help    - Run only help flag test"
+	# @echo "  make test-file    - Run only file conversion tests"
+	# @echo "  make test-line    - Run only line conversion tests"
+	# @echo "  make test-cli     - Run only command line tests"
+	# @echo "  make memcheck     - Run tests with valgrind (check for leaks)"
+	# @echo "  make run          - Build and run the program"
+	# @echo "  make debug        - Build and run with lldb debugger"
+	# @echo "  make clean        - Remove all build artifacts"
+	# @echo "  make help         - Show this help message"
 
 # .PHONY: all clean run debug test test-utils test-file test-line test-cli memcheck help
-.PHONY: all clean run debug
+.PHONY: all clean run debug test test-utils
 #
 # end

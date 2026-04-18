@@ -75,7 +75,7 @@ int parse_args(int argc, char *argv[], Config *config) {
             default:
                 fprintf(stderr, "Error: Invalid arguments\n\n");
                 print_usage(argv[0]);
-            return 1;
+                return 1;
         } // switch
     } // while
 

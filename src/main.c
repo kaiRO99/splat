@@ -28,7 +28,9 @@ int main(int argc, char *argv[]) {
 
     int parse = parse_args(argc, argv, &config);
     // 1 and -2 errors are handled in parse_args()
-    if (parse != 0) {
+    if (parse == -2) {
+        exit(0);
+    } else if (parse != 0) {
         // exit
         exit(1);
     } // if

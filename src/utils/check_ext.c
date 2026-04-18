@@ -103,4 +103,4 @@ int is_supported(const char *filename) {
         return 1;
     } // if
     return 0;
-} // is_webp()
+} // is_supported()

@@ -37,4 +37,4 @@ char *generate_output_path(const char *input_path) {
 
     free(input_copy);
     return output;
-} // generate_target_path()
+} // generate_output_path()
