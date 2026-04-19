@@ -159,6 +159,18 @@ test-out:
 	@mkdir -p ./tests/fixtures/outputs
 	@./tests/test_out.sh
 	@$(MAKE) clean-test
+
+.PHONY: test-force
+test-force:
+	@echo ""
+	@echo "========================================="
+	@echo "Running force flag tests..."
+	@echo "========================================="
+	@chmod +x tests/test_force.sh
+	@mkdir -p ./tests/fixtures/outputs
+	@./tests/test_force.sh
+	@$(MAKE) clean-test
+
 # # Run only line tests
 # .PHONY: test-line
 # test-line: $(TEST_LINE_BIN)
@@ -210,6 +222,7 @@ clean:
 clean-test:
 	@echo "Cleaning up test files"
 	@rm -rf tests/fixtures/outputs
+	@rm -f tests/fixtures/*.webp
 
 # Convenience targets
 .PHONY: run
