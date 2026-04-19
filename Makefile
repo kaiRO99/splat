@@ -137,6 +137,28 @@ test-help:
 	@chmod +x tests/test_help.sh
 	@./tests/test_help.sh
 
+# Run only quality flag test
+.PHONY: test-qual
+test-qual:
+	@echo ""
+	@echo "========================================="
+	@echo "Running qual flag tests..."
+	@echo "========================================="
+	@chmod +x tests/test_quality.sh
+	@mkdir -p ./tests/fixtures/outputs
+	@./tests/test_quality.sh
+	@$(MAKE) clean-test
+
+.PHONY: test-out
+test-out:
+	@echo ""
+	@echo "========================================="
+	@echo "Running qual flag tests..."
+	@echo "========================================="
+	@chmod +x tests/test_out.sh
+	@mkdir -p ./tests/fixtures/outputs
+	@./tests/test_out.sh
+	@$(MAKE) clean-test
 # # Run only line tests
 # .PHONY: test-line
 # test-line: $(TEST_LINE_BIN)

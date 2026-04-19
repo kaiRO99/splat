@@ -25,8 +25,7 @@
  * @return{int} Status of completion
  **/
 int convert_img(Config *config, char *input_path, char *output_path) {
-    printf("DEBUG input_path: '%s'\n", input_path);
-    printf("DEBUG is_jpeg: %d\n", is_jpeg(input_path));
+
     FILE *in = fopen(input_path, "rb");
     if (!in) {
         printf("failed to open file\n");

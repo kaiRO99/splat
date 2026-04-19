@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 /**
  * @brief Parses command line arguments.
@@ -45,37 +46,37 @@ int parse_args(int argc, char *argv[], Config *config) {
     while ((opt = getopt_long(argc, argv, "o:q:rftpdh", long_options, NULL)) !=
            -1) {
         switch (opt) {
-            case 'o':
-                config->output_path = optarg;
-                break;
-            case 'q':
-                quality = strtol(optarg, &end, 10);
-                if (end == optarg || *end != '\0') {
-                    fprintf(stderr, "error: quality value must be an integer\n");
-                    return -2;
-                } // if
-                if (quality < 0 || quality > 100) {
-                    fprintf(stderr, "error: quality must be between 0 and 100\n");
-                    return -2;
-                } // if
-                config->quality = quality;
+        case 'o':
+            config->output_path = optarg;
             break;
-            case 'r':
-                config->recursive = 1;
-                break;
-            case 'f':
-                config->force = 1;
-                break;
-            case 'd':
-                config->dry_run = 1;
-                break;
-            case 'h':
-                print_usage(argv[0]);
+        case 'q':
+            quality = strtol(optarg, &end, 10);
+            if (end == optarg || *end != '\0') {
+                fprintf(stderr, "error: quality value must be an integer\n");
                 return -2;
-            default:
-                fprintf(stderr, "Error: Invalid arguments\n\n");
-                print_usage(argv[0]);
-                return 1;
+            } // if
+            if (quality < 0 || quality > 100) {
+                fprintf(stderr, "error: quality must be between 0 and 100\n");
+                return -2;
+            } // if
+            config->quality = quality;
+            break;
+        case 'r':
+            config->recursive = 1;
+            break;
+        case 'f':
+            config->force = 1;
+            break;
+        case 'd':
+            config->dry_run = 1;
+            break;
+        case 'h':
+            print_usage(argv[0]);
+            return -2;
+        default:
+            fprintf(stderr, "Error: Invalid arguments\n\n");
+            print_usage(argv[0]);
+            return 1;
         } // switch
     } // while
 
@@ -95,10 +96,14 @@ int parse_args(int argc, char *argv[], Config *config) {
         // if there is an output, make sure it is directory too
         if (config->output_path && !is_dir(config->output_path)) {
             // error
-            fprintf(stderr, "Error: Output path must be directory if input "
-                    "path is directory.");
-            print_usage(argv[0]);
-            return 1;
+            // check if it exists but noy a directory
+            if (access(config->output_path, F_OK) == 0) {
+                fprintf(stderr, "Error: Output path must be directory if input "
+                                "path is directory.\n");
+                print_usage(argv[0]);
+                return 1;
+            } // if
+            // dir does not exist yet but will be created
         } // if
         if (!config->output_path) {
             config->output_path = argv[optind];
@@ -107,10 +112,10 @@ int parse_args(int argc, char *argv[], Config *config) {
     } else if (is_supported(argv[optind])) {
         // a file of accepted filetype
         config->input_path = argv[optind];
-        if (config->output_path && !is_supported(config->output_path)) {
+        if (config->output_path && !is_webp(config->output_path)) {
             // error
             fprintf(stderr, "Error: Output path must include filename with "
-                    "supported extension input path is file.");
+                            "supported extension input path is file.\n");
             print_usage(argv[0]);
             return 1;
         } // if
