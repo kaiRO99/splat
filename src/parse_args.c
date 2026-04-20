@@ -93,22 +93,24 @@ int parse_args(int argc, char *argv[], Config *config) {
     if (is_dir(argv[optind])) {
         // is a directory
         config->input_path = argv[optind];
+        // keep output_path NULL if none specified
         // if there is an output, make sure it is directory too
-        if (config->output_path && !is_dir(config->output_path)) {
-            // error
-            // check if it exists but noy a directory
-            if (access(config->output_path, F_OK) == 0) {
-                fprintf(stderr, "Error: Output path must be directory if input "
-                                "path is directory.\n");
-                print_usage(argv[0]);
-                return 1;
-            } // if
-            // dir does not exist yet but will be created
-        } // if
-        if (!config->output_path) {
-            config->output_path = argv[optind];
-        } // if
-          // make sure output is a path
+        /* if (config->output_path && !is_dir(config->output_path)) { */
+        /*     // error */
+        /*     // check if it exists but noy a directory */
+        /*     if (access(config->output_path, F_OK) == 0) { */
+        /*         fprintf(stderr, "Error: Output path must be directory if
+         * input " */
+        /*                         "path is directory.\n"); */
+        /*         print_usage(argv[0]); */
+        /*         return 1; */
+        /*     } // if */
+        /*     // dir does not exist yet but will be created */
+        /* } // if */
+        /* if (!config->output_path) { */
+        /*     config->output_path = argv[optind]; */
+        /* } // if */
+        // make sure output is a path
     } else if (is_supported(argv[optind])) {
         // a file of accepted filetype
         config->input_path = argv[optind];

@@ -55,8 +55,14 @@ int convert_dir(Config *config) {
             // generate target path
             char *output_name = generate_output_path(entry->d_name);
             char output_path[1024];
-            snprintf(output_path, sizeof(output_path), "%s/%s",
-                     config->output_path, output_name);
+            // if no -o flag, write next to source
+            if (config->output_path) {
+                snprintf(output_path, sizeof(output_path), "%s/%s",
+                         config->output_path, output_name);
+            } else {
+                snprintf(output_path, sizeof(output_path), "%s/%s",
+                         config->input_path, output_name);
+            } // if else
 
             // convert
             if (convert_img(config, input_path, output_path) != 0) {
@@ -66,10 +72,26 @@ int convert_dir(Config *config) {
             } // if else
             free(output_name);
         } else if (config->recursive && is_dir(input_path)) {
-            char sub_output[1024];
-            snprintf(sub_output, sizeof(sub_output), "%s/%s",
-                     config->input_path, entry->d_name);
-            int result = convert_dir(config);
+            if (config->output_path &&
+                strcmp(input_path, config->output_path) == 0) {
+                continue;
+            } // if
+            Config sub_config = *config;
+            sub_config.input_path = input_path;
+
+            // if out specified, create matching subdirectory
+            // if not, leave as NULL so it outputs besiide input
+
+            if (config->output_path) {
+                char sub_output[1024];
+                snprintf(sub_output, sizeof(sub_output), "%s/%s",
+                         config->output_path, entry->d_name);
+                sub_config.output_path = sub_output;
+            } // if
+            // temp config for recursion
+            sub_config.output_path_allocated = 0; // no malloc used
+
+            int result = convert_dir(&sub_config);
             if (result != 0) {
                 error_count++;
             } // if

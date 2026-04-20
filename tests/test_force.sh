@@ -42,7 +42,8 @@ if [ "$OUT_SIZE" -ne "$EXPECTED_SIZE" ]; then
     echo "PASS: force flag replaced the image."
 else
     echo "FAIL: force flag did not replace the image."
-    return 1
+    cleanUp
+    exit 1
 fi
 
 # --- w/output flag ---
@@ -56,7 +57,8 @@ if [ "$OUT_SIZE" -ne "$EXPECTED_SIZE" ]; then
     echo "PASS: force flag replaced the image."
 else
     echo "FAIL: force flag did not replace the image."
-    return 1
+    cleanUp
+    exit 1
 fi
 
 # --- w/dir as input ---
@@ -70,9 +72,9 @@ if [ "$OUT_SIZE" -ne "$EXPECTED_SIZE" ]; then
     echo "PASS: force flag replaced the image."
 else
     echo "FAIL: force flag did not replace the image."
-    return 1
+    cleanUp
+    exit 1
 fi
 
 echo "PASS: output test"
-rm -f "$OUTPUT_IMG"
-rm -rf "$OUTPUT_DIR"
+cleanUp

@@ -171,6 +171,17 @@ test-force:
 	@./tests/test_force.sh
 	@$(MAKE) clean-test
 
+.PHONY: test-recursive
+test-recursive:
+	@echo ""
+	@echo "========================================="
+	@echo "Running recursive flag tests..."
+	@echo "========================================="
+	@chmod +x tests/test_recursive.sh
+	@mkdir -p ./tests/fixtures/outputs
+	@./tests/test_recursive.sh
+	@$(MAKE) clean-test
+
 # # Run only line tests
 # .PHONY: test-line
 # test-line: $(TEST_LINE_BIN)
