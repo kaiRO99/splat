@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 # tests/test_utils.sh
 # @brief Tests the command line ouput from utility functions.
+# @author Kai Ryall Ota
+# @date April 2026
 
 BINARY="./bin/splat"
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 # tests/test_force.sh
 # @brief tests the force flag for file and dir
+# @author Kai Ryall Ota
+# @date April 2026
 
 BINARY="./bin/splat"
 INPUT_IMG="./tests/fixtures/KaiRyallOtajpg.jpg"

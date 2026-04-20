@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 # tests/test_recursive.sh
 # @brief tests the recursive flag
+# @author Kai Ryall Ota
+# @date April 2026
 
 BINARY="./bin/splat"
 INPUT_DIR="./tests/fixtures"

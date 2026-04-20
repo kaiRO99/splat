@@ -26,6 +26,12 @@
  **/
 int convert_img(Config *config, char *input_path, char *output_path) {
 
+    if (config->dry_run) {
+        // print and return
+        printf("[DRY RUN] Convert: %s -> %s\n", input_path, output_path);
+        return 0;
+    }// if
+
     FILE *in = fopen(input_path, "rb");
     if (!in) {
         printf("failed to open file\n");

@@ -182,6 +182,15 @@ test-recursive:
 	@./tests/test_recursive.sh
 	@$(MAKE) clean-test
 
+.PHONY: test-dry
+test-dry:
+	@echo ""
+	@echo "========================================="
+	@echo "Running dry-run flag tests..."
+	@echo "========================================="
+	@chmod +x tests/test_dry.sh
+	@./tests/test_dry.sh
+	@$(MAKE) clean-test
 # # Run only line tests
 # .PHONY: test-line
 # test-line: $(TEST_LINE_BIN)
