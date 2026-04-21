@@ -25,7 +25,6 @@ Options:</br>
 - show the difference in file sizes after conversion
 
 ## TODO:
-- Add colors to output of test scripts
 
 ## Roadmap:
 - [ ] Add RAW format support (need height and width from user).
@@ -33,3 +32,16 @@ Options:</br>
 
 ## Notes:
 - If adding more formats, separate parsing into src/formats/"format".c
+
+## Tests:
+
+``` shell
+make test # run all tests
+make test-utils # run utility functions 
+make test-help # run help flag test
+make test-qual # run quality flag test
+make test-out # run output flag test
+make test-force # run force flag test
+make test-recursive # run recursive flag test
+make test-dry # run dry-run test
+```
