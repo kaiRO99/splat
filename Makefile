@@ -4,8 +4,6 @@
 # @file
 # @version 0.1
 
-
-# Run adapter: lldb-dap :program "bin/md_to_org" :args ["tests/test.md" "tests/test.org"] :compile "make"
 # Compier and Flags
 CC :=gcc
 CFLAGS := -g -O0 -Wall -Wextra -std=c11
@@ -21,7 +19,6 @@ BIN_DIR := bin
 BUILD_DIR:= $(BIN_DIR)/build
 TEST_DIR := tests
 UNITY_DIR := $(TEST_DIR)/unity
-# TEST_HELPERS_DIR := $(TEST_DIR)/utils
 
 # Main program
 TARGET:= $(BIN_DIR)/splat
@@ -31,16 +28,9 @@ OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 #Testing
 UNITY_SRC :=$(UNITY_DIR)/unity.c
 TEST_UTILS_SRC :=$(TEST_DIR)/test_utils.c
-# TEST_LINE_SRC :=$(TEST_DIR)/test_line.c
-# TEST_CLI_SRC :=$(TEST_DIR)/test_cli.c
-# TEST_HELPERS_SRC := $(wildcard $(TEST_HELPERS_DIR)/*.c)
 
 # TEST executables (separate binaries for each test suite)
-# TEST_FILE_BIN :=$(BIN_DIR)/test_file
 TEST_UTILS_BIN:=$(BIN_DIR)/test_utils
-TEST_HELP_BIN:=$(Bin_DIR)/test_help
-# TEST_LINE_BIN:=$(BIN_DIR)/test_line
-# TEST_CLI_BIN:=$(BIN_DIR)/test_cli
 
 #Filter out main.o
 TEST_OBJS:= $(filter-out $(BUILD_DIR)/main.o,$(OBJS))
@@ -90,33 +80,40 @@ test: clean-test $(TEST_FILE_BIN) $(TEST_UTILS_BIN) $(TEST_LINE_BIN) $(TEST_CLI_
 	@echo "========================================="
 	@chmod +x tests/test_help.sh
 	@./tests/test_help.sh
-# 	@echo ""
-# 	@echo "Running File Conversion Tests..."
-# 	@echo "========================================="
-# 	-@./$(TEST_FILE_BIN)
-# 	@$(MAKE) clean-test
-# 	@echo ""
-# 	@echo "Running Line Conversion Tests..."
-# 	@echo "========================================="
-# 	-@./$(TEST_LINE_BIN)
-# 	@$(MAKE) clean-test
-# 	@echo ""
-# 	@echo "Running Command Line Tests..."
-# 	@echo "========================================="
-# 	-@./$(TEST_CLI_BIN)
-# 	@$(MAKE) clean-test
-# 	@echo ""
-# 	@echo "All tests passed!"
-
-# Run only file tests
-# .PHONY: test-file
-# test-file: clean-test $(TEST_FILE_BIN)
-# 	@echo ""
-# 	@echo "========================================="
-# 	@echo "Running file conversion tests..."
-# 	@echo "========================================="
-# 	@./$(TEST_FILE_BIN)
-# 	@$(MAKE) clean-test
+	@echo ""
+	@echo "Running Quality Flag Tests..."
+	@echo "========================================="
+	@chmod +x tests/test_quality.sh
+	@mkdir -p ./tests/fixtures/outputs
+	@./tests/test_quality.sh
+	@$(MAKE) clean-test
+	@echo ""
+	@echo "Running Quality Flag Tests..."
+	@echo "========================================="
+	@chmod +x tests/test_out.sh
+	@mkdir -p ./tests/fixtures/outputs
+	@./tests/test_out.sh
+	@$(MAKE) clean-test
+	@echo ""
+	@echo "Running Force Flag Tests..."
+	@echo "========================================="
+	@chmod +x tests/test_force.sh
+	@mkdir -p ./tests/fixtures/outputs
+	@./tests/test_force.sh
+	@$(MAKE) clean-test
+	@echo ""
+	@echo "Running Recursive Flag Tests..."
+	@echo "========================================="
+	@chmod +x tests/test_recursive.sh
+	@mkdir -p ./tests/fixtures/outputs
+	@./tests/test_recursive.sh
+	@$(MAKE) clean-test
+	@echo ""
+	@echo "Running Dry-run Flag Tests..."
+	@echo "========================================="
+	@chmod +x tests/test_dry.sh
+	@./tests/test_dry.sh
+	@$(MAKE) clean-test
 
 # Run only utils tests
 .PHONY: test-utils
@@ -191,24 +188,6 @@ test-dry:
 	@chmod +x tests/test_dry.sh
 	@./tests/test_dry.sh
 	@$(MAKE) clean-test
-# # Run only line tests
-# .PHONY: test-line
-# test-line: $(TEST_LINE_BIN)
-# 	@echo ""
-# 	@echo "========================================="
-# 	@echo "Running line conversion tests..."
-# 	@echo "========================================="
-# 	@./$(TEST_LINE_BIN)
-
-# Run only command line tests
-# .PHONY: test-cli
-# test-cli: clean-test $(TEST_CLI_BIN)
-# 	@echo ""
-# 	@echo "========================================="
-# 	@echo "Running command line tests..."
-# 	@echo "========================================="
-# 	@./$(TEST_CLI_BIN) || ($(MAKE) clean-test && exit 1)
-# 	@$(MAKE) clean-test
 
 # Valgrind mem leak check on tests
 # .PHONY: memcheck
@@ -231,8 +210,6 @@ test-dry:
 # 	valgrind --leak-check=full --show-leak-kinds=all ./$(TEST_CLI_BIN)
 
 # Clean
-#
-# rm -rf $(BUILD_DIR) $(TARGET) $(TEST_FILE_BIN) $(TEST_UTILS_BIN) $(TEST_LINE_BIN)
 .PHONY: clean
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_UTILS_BIN) $(TEST_HELP_BIN)
@@ -257,18 +234,21 @@ debug: $(TARGET)
 .PHONY: help
 help:
 	@echo "Available targets:"
-	@echo "  make              - Build the main program"
-	@echo "  make test         - Build and run all tests"
-	@echo "  make test-utils   - Run only utility function tests"
-	@echo "  make test-help    - Run only help flag test"
-	# @echo "  make test-file    - Run only file conversion tests"
-	# @echo "  make test-line    - Run only line conversion tests"
-	# @echo "  make test-cli     - Run only command line tests"
-	# @echo "  make memcheck     - Run tests with valgrind (check for leaks)"
-	# @echo "  make run          - Build and run the program"
-	# @echo "  make debug        - Build and run with lldb debugger"
-	# @echo "  make clean        - Remove all build artifacts"
-	# @echo "  make help         - Show this help message"
+	@echo "  make                  - Build the main program"
+	@echo "  make test             - Build and run all tests"
+	@echo "  make test-utils       - Run only utility function tests"
+	@echo "  make test-help        - Run only help flag test"
+	@echo "  make test-dry         - Run only dry-run flag test"
+	@echo "  make test-recursive   - Run only recursive flag test"
+	@echo "  make test-out         - Run only output flag test"
+	@echo "  make test-qual        - Run only quality flag test"
+	@echo "  make test-force       - Run only force flag test"
+	@echo "  make run              - Build and run the program"
+	@echo "  make debug            - Build and run with lldb debugger"
+	@echo "  make clean            - Remove all build artifacts"
+	@echo "  make help             - Show this help message"
+
+# @echo "  make memcheck     - Run tests with valgrind (check for leaks)"
 
 # .PHONY: all clean run debug test test-utils test-file test-line test-cli memcheck help
 .PHONY: all clean run debug test test-utils
