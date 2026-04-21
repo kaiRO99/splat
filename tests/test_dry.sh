@@ -17,19 +17,19 @@ EXIT_CODE=$? # exit code from last command
 
 # check it prints the use (help flag)
 # Only checks first couple lines
-if echo "$OUTPUT" | grep -qF "[DRY RUN] Convert: ./tests/fixtures/KaiRyallOtajpg.jpg -> ./tests/fixtures/KaiRyallOtajpg.webp"; then
-    echo "PASS: dry-run flag printed dry-run"
+if echo "$OUTPUT" | grep -qF "[DRY RUN] Convert: ./tests/fixtures/testjpg.jpg -> ./tests/fixtures/testjpg.webp"; then
+    echo -e "${GREEN}PASS: dry-run flag printed dry-run${NC}"
 else
-    echo "FAIL: dry-run flag did not print expected"
+    echo -e "${RED}FAIL: dry-run flag did not print expected${NC}"
     echo "Got: $OUTPUT"
     exit 1
 fi
 
 # check exit code (should be 0)
 if [ "$EXIT_CODE" -eq 0 ]; then
-    echo "PASS: Dry-run flag retuns zero exit code"
+    echo -e "${GREEN}PASS: Dry-run flag retuns zero exit code${NC}"
 else
-    echo "FAIL: expected zero exit code, got $EXIT_CODE"
+    echo -e "${GREEN}FAIL: expected zero exit code, got $EXIT_CODE ${NC}"
     exit 1
 fi
 

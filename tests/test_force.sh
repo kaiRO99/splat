@@ -4,29 +4,35 @@
 # @author Kai Ryall Ota
 # @date April 2026
 
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 BINARY="./bin/splat"
-INPUT_IMG="./tests/fixtures/KaiRyallOtajpg.jpg"
+INPUT_IMG="./tests/fixtures/testjpg.jpg"
 INPUT_DIR="./tests/fixtures"
-OUTPUT_FLAG_IMG="./tests/fixtures/outputs/force_test.webp"
-OUTPUT_IMG="./tests/fixtures/KaiRyallOtajpg.webp"
+OUTPUT_FLAG_IMG="./tests/fixtures/outputs/test_force.webp"
+OUTPUT_IMG="./tests/fixtures/testjpg.webp"
 OUTPUT_DIR="./tests/fixtures/outputs"
-EXPECTED_IMG="./tests/fixtures/expected/force_test.webp"
+EXPECTED_IMG="./tests/fixtures/expected/test_force.webp"
 
 cleanUp(){
     rm -f "$OUTPUT_IMG"
     rm -rf "$OUTPUT_DIR"
-}
+} # cleanup()
 
 setUp(){
     mkdir -p ./tests/fixtures/outputs # create output dir
+
+    # grnerate expected image
     #copy expected outputs
     cp "$EXPECTED_IMG" ./tests/fixtures
     cp "$EXPECTED_IMG" ./tests/fixtures/outputs
 
-    #rename force_test.webp to KaiRyallOtajpg.webp
-    mv ./tests/fixtures/force_test.webp ./tests/fixtures/KaiRyallOtajpg.webp
-}
-
+    #rename test_force.webp to testjpg.webp
+    mv ./tests/fixtures/test_force.webp ./tests/fixtures/testjpg.webp
+} # setUp()
 
 #run tests
 # --- single image ---
@@ -39,11 +45,11 @@ EXPECTED_SIZE=$(stat -c%s "$EXPECTED_IMG")
 OUT_SIZE=$(stat -c%s "$OUTPUT_IMG")
 
 # --- check outputs for image ---
-# if size of KaiRyallOtajpg.webp changes, it worked
+# if size of testjpg.webp changes, it worked
 if [ "$OUT_SIZE" -ne "$EXPECTED_SIZE" ]; then
-    echo "PASS: force flag replaced the image."
+    echo -e "${GREEN}PASS: force flag replaced the image.${NC}"
 else
-    echo "FAIL: force flag did not replace the image."
+    echo -e "${RED}FAIL: force flag did not replace the image.${NC}"
     cleanUp
     exit 1
 fi
@@ -54,11 +60,11 @@ setUp
 $BINARY -f -o "$OUTPUT_FLAG_IMG" "$INPUT_IMG"
 OUT_SIZE=$(stat -c%s "$OUTPUT_FLAG_IMG")
 # --- check outputs for image ---
-# if size of KaiRyallOtajpg.webp changes, it worked
+# if size of testjpg.webp changes, it worked
 if [ "$OUT_SIZE" -ne "$EXPECTED_SIZE" ]; then
-    echo "PASS: force flag replaced the image."
+    echo -e "${GREEN}PASS: force flag replaced the image.${NC}"
 else
-    echo "FAIL: force flag did not replace the image."
+    echo -e "${RED}FAIL: force flag did not replace the image.${NC}"
     cleanUp
     exit 1
 fi
@@ -69,14 +75,14 @@ setUp
 $BINARY -f "$INPUT_DIR"
 OUT_SIZE=$(stat -c%s "$OUTPUT_IMG")
 # --- check outputs for image ---
-# if size of KaiRyallOtajpg.webp changes, it worked
+# if size of testjpg.webp changes, it worked
 if [ "$OUT_SIZE" -ne "$EXPECTED_SIZE" ]; then
-    echo "PASS: force flag replaced the image."
+    echo -e "${GREEN}PASS: force flag replaced the image.${NC}"
 else
-    echo "FAIL: force flag did not replace the image."
+    echo -e "${RED}FAIL: force flag did not replace the image.${NC}"
     cleanUp
     exit 1
 fi
 
-echo "PASS: output test"
+echo -e "${GREEN}PASS: force test${NC}"
 cleanUp
