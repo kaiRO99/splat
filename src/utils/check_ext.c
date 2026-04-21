@@ -7,6 +7,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include "check_ext.h"
 #include <string.h>
+#include <strings.h>
 
 /**
  * @brief Checks if file has .png extension
@@ -18,7 +19,7 @@ int is_png(const char *filename) {
         return 0;
 
     char *dot = strrchr(filename, '.');
-    if (dot && strcmp(dot, ".png") == 0) {
+    if (dot && strcasecmp(dot, ".png") == 0) {
         // is a .ppm
         return 1;
     } // if
@@ -36,7 +37,7 @@ int is_ppm(const char *filename) {
         return 0;
 
     char *dot = strrchr(filename, '.');
-    if (dot && strcmp(dot, ".ppm") == 0) {
+    if (dot && strcasecmp(dot, ".ppm") == 0) {
         // is a .ppm
         return 1;
     } // if
@@ -54,7 +55,8 @@ int is_jpeg(const char *filename) {
         return 0;
 
     char *dot = strrchr(filename, '.');
-    if (dot && (strcmp(dot, ".jpeg") == 0 || strcmp(dot, ".jpg") == 0)) {
+    if (dot &&
+        (strcasecmp(dot, ".jpeg") == 0 || strcasecmp(dot, ".jpg") == 0)) {
         // is a .jpeg or .jpg
         return 1;
     } // if
@@ -71,7 +73,7 @@ int is_webp(const char *filename) {
         return 0;
 
     char *dot = strrchr(filename, '.');
-    if (dot && strcmp(dot, ".webp") == 0) {
+    if (dot && strcasecmp(dot, ".webp") == 0) {
         // is a .jpeg or .jpg
         return 1;
     } // if
@@ -84,8 +86,8 @@ int is_webp(const char *filename) {
  * @return{int} Status of comparison. (1:is supported, 0:not supported).
  * */
 int supported_ext(char *ext) {
-    return strcmp(ext, ".jpeg") == 0 || strcmp(ext, ".jpg") == 0 ||
-           strcmp(ext, ".ppm") == 0 || strcmp(ext, ".png") == 0;
+    return strcasecmp(ext, ".jpeg") == 0 || strcasecmp(ext, ".jpg") == 0 ||
+        strcasecmp(ext, ".ppm") == 0 || strcasecmp(ext, ".png") == 0;
 } // supported_ext()
 
 /**
