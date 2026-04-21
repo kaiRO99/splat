@@ -25,6 +25,7 @@ Options:</br>
 - show the difference in file sizes after conversion
 
 ## TODO:
+- write memcheck test
 
 ## Roadmap:
 - [ ] Add RAW format support (need height and width from user).
