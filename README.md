@@ -16,15 +16,16 @@ Arguments:</br>
 Options:</br>
   -o, --output PATH    Output path for file conversions (file/directory).</br>
   -q, --quality VALUE  Quality of output file (default is 100%).</br>
-  
-  
+  -r, --recursive      Process directories recursively.</br>
+  -f, --force          Overwrite existing files.</br>
+  -d, --dry-run        Show what would be done without doing it.</br>
+  -h, --help           Shows help message.</br>
   
 ## Ideas:
 - show the difference in file sizes after conversion
 
 ## TODO:
-- Make sure to ensure outptut path with -o flag is a dir of input is a dir
-- Ensure returns are consistent
+- Add colors to output of test scripts
 
 ## Roadmap:
 - [ ] Add RAW format support (need height and width from user).
