@@ -122,7 +122,8 @@ int parse_args(int argc, char *argv[], Config *config) {
             return 1;
         } // if
         if (!config->output_path) {
-            config->output_path = generate_output_path(argv[optind]);
+            config->output_path =
+                generate_output_path(argv[optind]); // free'd in convert_img
             config->output_path_allocated = 1;
         } // if
     } else {

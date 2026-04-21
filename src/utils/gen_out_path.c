@@ -32,7 +32,7 @@ char *generate_output_path(const char *input_path) {
     } // if
 
     // build outout path: same location, cjange extension
-    char *output = malloc(strlen(input_copy) + 5);
+    char *output = malloc(strlen(input_copy) + 6);
     sprintf(output, "%s.webp", input_copy);
 
     free(input_copy);

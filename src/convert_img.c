@@ -7,8 +7,6 @@
 #include "convert_img.h"
 #include "check_ext.h"
 #include "config.h"
-#include "gen_out_path.h"
-#include "is_dir.h"
 #include "output_img.h"
 #include "parse_img.h"
 #include <stdint.h>
@@ -30,7 +28,19 @@ int convert_img(Config *config, char *input_path, char *output_path) {
         // print and return
         printf("[DRY RUN] Convert: %s -> %s\n", input_path, output_path);
         return 0;
-    }// if
+    } // if
+
+    if (!config->force) {
+        FILE *check = fopen(output_path, "r");
+        if (check) {
+            fclose(check);
+            fprintf(
+                stderr,
+                "Skipping %s, output already exists (use -f to overwrite)\n",
+                output_path);
+            return 0;
+        } // if
+    } // if
 
     FILE *in = fopen(input_path, "rb");
     if (!in) {
@@ -41,7 +51,6 @@ int convert_img(Config *config, char *input_path, char *output_path) {
     int channels = 0; // track RGB or RGBA
     uint8_t *pixels =
         NULL; // NOTE: malloced at if else, free() in output_webp()
-    int generated_path = 0;
 
     if (is_jpeg(input_path)) {
         // is a jpeg or jpg
@@ -49,6 +58,7 @@ int convert_img(Config *config, char *input_path, char *output_path) {
         pixels = parse_jpeg(in, &width, &height, &stride);
         if (!pixels) {
             // error
+            fclose(in);
             fprintf(stderr, "Error: Unable to parse input image %s\n",
                     input_path);
             return 1;
@@ -60,6 +70,7 @@ int convert_img(Config *config, char *input_path, char *output_path) {
         pixels = parse_ppm(in, &width, &height, &stride);
         if (!pixels) {
             // error
+            fclose(in);
             fprintf(stderr, "Error: Unable to parse input image %s\n",
                     input_path);
             return 1;
@@ -71,6 +82,7 @@ int convert_img(Config *config, char *input_path, char *output_path) {
         pixels = parse_png(in, &width, &height, &stride, &channels);
         if (!pixels) {
             // error
+            fclose(in);
             fprintf(stderr, "Error: Unable to parse input image %s\n",
                     input_path);
             return 1;
@@ -90,8 +102,7 @@ int convert_img(Config *config, char *input_path, char *output_path) {
     int result = output_webp(pixels, config, output_path, width, height, stride,
                              channels);
 
-    // NOTE: add a check to see if it did use generate_target_path()?
-    if (config->output_path && generated_path) {
+    if (config->output_path && config->output_path_allocated) {
         free(config->output_path);
     } // if
     return result;

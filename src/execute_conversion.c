@@ -37,8 +37,6 @@ int execute_conversion(Config *config) {
     } else {
         // file
         // run convert_img()
-        // TODO: if there is an out, make sure it is a .webp
-        // else gen path
         return convert_img(config, config->input_path, config->output_path);
     } // if else
 } // execute_conversion()
