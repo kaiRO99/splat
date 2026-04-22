@@ -27,6 +27,7 @@ Options:</br>
 ## TODO:
 - write memcheck test
 - add case to force flag test where file exists and no force flag
+- test cases for invalid inputs
 
 ## Roadmap:
 - [ ] Add RAW format support (need height and width from user).
